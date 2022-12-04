@@ -11,17 +11,19 @@ $root=$XmlDocument.DocumentElement
 function fillTxt {
 
     param (
-        $xmlNode, $level, $outPutFileContent
+        $xmlNode, $outPutFileContent,  $level=1 ,$htable=@{}, $currentHtableList=@{}
     )
 
     if ($xmlNode.ChildNodes.Count -lt 1){
         #$outPutFileContent.Add([string]$level + ";" + [string]$xmlNode.Name) 
+        
     }
     else {
-        $lineNb=$outPutFileContent.Add([string]$level + ";" + [string]$xmlNode.Name)
+        [string]$line=[string]$level + ";" + [string]$xmlNode.Name
+        $lineNb=$outPutFileContent.Add($line)
         for ($i=0; $i -lt $xmlNode.ChildNodes.Count; $i=$i+1){
             $nextLevel=$level+1
-            $outPut=fillTxt $xmlNode.ChildNodes[$i]  $nextLevel  $outPutFileContent 
+            $outPut=fillTxt $xmlNode.ChildNodes[$i] $outPutFileContent $nextLevel
             Write-OutPut $outPut
         }
     }
@@ -36,17 +38,20 @@ function fuseContent {
     #if ($)
 }
 
+#Unfinished function
 function getStruct {
     param (
-        $outPutFileContent, $lineNb=$outPutFileContent.Count-1, [System.Collections.ArrayList]$struct=@()
+        $outPutFileContent, [int]$lineNb=$outPutFileContent.Count-1, [System.Collections.ArrayList]$struct=@()
     )
-    $currentLine=$outPutFileContent[$lineNb]
+    $currentLine=$outPutFileContent.Item($lineNb)
     $currentLevel=getLevel $currentLine
-    for ([int]$i=$lineNb; $i>=1; $i--){
-        if ($i == $currentLevel-1)
+    for ($i=$lineNb-1; $i -gt 0; $i=$i-1){
+        $potentialSubLevel=getLevel $outPutFileContent.Item($i)
+        if ($potentialSubLevel -eq $currentLevel-1)
         {   
-            $struct.Add($outPutFileContent[$lineNb])
-            Write-Output getStruct($outPutFileContent, $lineNb, $struct)
+            $subLevelElement=getName $outPutFileContent.Item($i)
+            $struct.Add($outPutFileContent.Item($i))
+            Write-Output getStruct($outPutFileContent, $i+1, $struct)
             break
         }
     }
@@ -74,8 +79,10 @@ function getLevel {
     }
 }
 
-fillTxt $root 1 $outPutFileContent
-$tmp=getStruct $outPutFileContent 
+fillTxt $root $outPutFileContent
+
+$lineNb=$outPutFileContent.Count-1
+$tmp=getStruct $outPutFileContent
 Write-Output $tmp
 
 Set-Content -Path  $structureFileName -Value $null

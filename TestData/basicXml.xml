@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Cars>
     <Car Mark="Ford" Model="Fiesta">
         <Seats>4</Seats>
@@ -16,3 +17,4 @@
         <Interior>Cloth</Interior>
     </Car>
 </Cars>
+

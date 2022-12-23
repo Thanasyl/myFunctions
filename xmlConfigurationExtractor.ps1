@@ -1,7 +1,10 @@
-param ($xmlFileName='.\TestData\basicXml.xml', $structureFileName='.\TestData\basicXmlStructure.csv')
+param ($xmlFileName, $structureFileName)
 
 if ($xmlFileName -eq $null) {
-    $xmlFileName = read-host -Prompt "Please enter an xmlFileName" 
+    $xmlFileName = read-host -Prompt "Please enter .xml source fileName" 
+}   
+if ($structureFileName -eq $null) {
+    $structureFileName = read-host -Prompt "Please enter .csv target fileName" 
 }   
 
 [xml]$XmlDocument = Get-Content -Path $xmlFileName

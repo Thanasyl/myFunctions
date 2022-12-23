@@ -1,9 +1,9 @@
 param ($xmlFileName, $structureFileName)
 
-if ($xmlFileName -eq $null) {
+if ( $null -eq $xmlFileName ) {
     $xmlFileName = read-host -Prompt "Please enter .xml source fileName" 
 }   
-if ($structureFileName -eq $null) {
+if ( $null -eq $structureFileName ) {
     $structureFileName = read-host -Prompt "Please enter .csv target fileName" 
 }   
 
@@ -17,7 +17,7 @@ function fillTxt {
     )
 
     if ($struct.Count -lt 1){
-        #$outPutFileContent.Add([string]$level + ";" + [string]$xmlNode.Name) 
+        #Nothing to add
     }
     else {
         foreach ($key in $struct.keys)

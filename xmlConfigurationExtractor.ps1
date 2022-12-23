@@ -1,4 +1,4 @@
-param ($xmlFileName = "C:\Users\Developpeur\Documents\Project.xml", $structureFileName = 'C:\Users\Developpeur\Documents\Project.csv')
+param ($xmlFileName , $structureFileName )
 
 if ( $null -eq $xmlFileName ) {
     $xmlFileName = read-host -Prompt "Please enter .xml source fileName" 

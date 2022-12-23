@@ -7,6 +7,7 @@ if ($xmlFileName -eq $null) {
 [xml]$XmlDocument = Get-Content -Path $xmlFileName
 $root=$XmlDocument.DocumentElement
 <<<<<<< HEAD
+<<<<<<< HEAD
 $dictStruct=@{}
 [System.Collections.ArrayList]$outPutFileContent= @()
 $dictStruct["test"]=@{Name="value"}
@@ -17,17 +18,23 @@ function fillTxt {
     param (
         $xmlNode, $outPutFileContent,  $level=1 ,$htable=@{}, $currentHtableList=@{}
 =======
+=======
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
 [System.Collections.ArrayList]$outPutFileContent= @()
 
 function fillTxt {
 
     param (
         $struct, $outPutFileContent
+<<<<<<< HEAD
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
+=======
 >>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
     )
 
     if ($xmlNode.ChildNodes.Count -lt 1){
         #$outPutFileContent.Add([string]$level + ";" + [string]$xmlNode.Name) 
+<<<<<<< HEAD
 <<<<<<< HEAD
         
     }
@@ -38,18 +45,24 @@ function fillTxt {
             $nextLevel=$level+1
             $outPut=fillTxt $xmlNode.ChildNodes[$i] $outPutFileContent $nextLevel
 =======
+=======
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
     }
     else {
         $lineNb=$outPutFileContent.Add([string]$level + "," + [string]$xmlNode.Name)
         for ($i=0; $i -lt $xmlNode.ChildNodes.Count; $i=$i+1){
             $nextLevel=$level+1
             $outPut=fillTxt $xmlNode.ChildNodes[$i]  $nextLevel  $outPutFileContent 
+<<<<<<< HEAD
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
+=======
 >>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
             Write-OutPut $outPut
         }
     }
 }
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 #Unfinished function
@@ -101,6 +114,8 @@ Write-Output $lineNb
 Set-Content -Path  $structureFileName -Value $null
 $outPutFileContent | foreach { Add-Content -Path  $structureFileName -Value $_ }
 =======
+=======
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
 function fillStruct {
     param (
         $xmlNode, [hashtable]$struct = @{}
@@ -129,5 +144,9 @@ foreach($key in $struct.keys)
     Write-Output $struct[$key]
 }
 Set-Content -Path  $structureFileName -Value $null
+<<<<<<< HEAD
+#$outPutFileContent | foreach { Add-Content -Path  $structureFileName -Value $_ }
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
+=======
 #$outPutFileContent | foreach { Add-Content -Path  $structureFileName -Value $_ }
 >>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246

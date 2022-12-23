@@ -1,4 +1,8 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
 =======
 <?xml version="1.0" encoding="UTF-8"?>
 >>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
@@ -20,7 +24,12 @@
         <Interior>Cloth</Interior>
     </Car>
 <<<<<<< HEAD
+<<<<<<< HEAD
 </Cars>
+=======
+</Cars>
+
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
 =======
 </Cars>
 

@@ -8,12 +8,28 @@ if ( $null -eq $structureFileName ) {
 }   
 
 [xml]$XmlDocument = Get-Content -Path $xmlFileName
-[System.Collections.ArrayList]$outPutFileContent= @()
+[System.Collections.ArrayList]$CSV= @()
 
-function fillTxt {
+function fillCSV
+{
+    param (
+        $struct, $CSV
+    )
+
+    fillCSVHeader $CSV
+    fillCSVData $struct $CSV
+}
+function fillCSVHeader
+{
+    param (
+        $CSV
+    )
+    $lineNb = $CSV.Add("level,TAG")
+}
+function fillCSVData {
 
     param (
-        $struct, $outPutFileContent, [int]$level=1
+        $struct, $CSV, [int]$level=1
     )
 
     if ($struct.Count -lt 1){
@@ -24,8 +40,8 @@ function fillTxt {
         {
             if ($key -ne "#text")
             {
-                $lineNb = $outPutFileContent.Add([string]$level + "," + [string]$key)
-                fillTxt $struct[$key] $outPutFileContent $($level+1)
+                $lineNb = $CSV.Add([string]$level + "," + [string]$key)
+                fillCSVData $struct[$key] $CSV $($level+1)
             }
         }
     }
@@ -70,7 +86,7 @@ function combineStruct {
 
 $struct = @{}
 fillStruct $XmlDocument $struct
-fillTxt $struct $outPutFileContent
+fillCSV $struct $CSV
 
 Set-Content -Path  $structureFileName -Value $null
-$outPutFileContent | foreach { Add-Content -Path  $structureFileName -Value $_ }
+$CSV | foreach { Add-Content -Path  $structureFileName -Value $_ }

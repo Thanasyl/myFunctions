@@ -6,6 +6,7 @@ if ($xmlFileName -eq $null) {
 
 [xml]$XmlDocument = Get-Content -Path $xmlFileName
 $root=$XmlDocument.DocumentElement
+<<<<<<< HEAD
 $dictStruct=@{}
 [System.Collections.ArrayList]$outPutFileContent= @()
 $dictStruct["test"]=@{Name="value"}
@@ -15,10 +16,19 @@ function fillTxt {
 
     param (
         $xmlNode, $outPutFileContent,  $level=1 ,$htable=@{}, $currentHtableList=@{}
+=======
+[System.Collections.ArrayList]$outPutFileContent= @()
+
+function fillTxt {
+
+    param (
+        $struct, $outPutFileContent
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
     )
 
     if ($xmlNode.ChildNodes.Count -lt 1){
         #$outPutFileContent.Add([string]$level + ";" + [string]$xmlNode.Name) 
+<<<<<<< HEAD
         
     }
     else {
@@ -27,11 +37,20 @@ function fillTxt {
         for ($i=0; $i -lt $xmlNode.ChildNodes.Count; $i=$i+1){
             $nextLevel=$level+1
             $outPut=fillTxt $xmlNode.ChildNodes[$i] $outPutFileContent $nextLevel
+=======
+    }
+    else {
+        $lineNb=$outPutFileContent.Add([string]$level + "," + [string]$xmlNode.Name)
+        for ($i=0; $i -lt $xmlNode.ChildNodes.Count; $i=$i+1){
+            $nextLevel=$level+1
+            $outPut=fillTxt $xmlNode.ChildNodes[$i]  $nextLevel  $outPutFileContent 
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
             Write-OutPut $outPut
         }
     }
 }
 
+<<<<<<< HEAD
 
 #Unfinished function
 function getStruct {
@@ -81,3 +100,34 @@ Write-Output $lineNb
 
 Set-Content -Path  $structureFileName -Value $null
 $outPutFileContent | foreach { Add-Content -Path  $structureFileName -Value $_ }
+=======
+function fillStruct {
+    param (
+        $xmlNode, [hashtable]$struct = @{}
+    )
+    
+    foreach($childNode in $xmlNode.ChildNodes)
+    {
+        [hashtable]$childStruct=@{}
+        fillStruct $childNode $childStruct
+
+        if ( $struct.keys -contains $childNode.Name ){
+            #$struct[$childNode.Name].Add($childStruct)
+        }
+        else {
+            $struct.Add($childNode.Name, $childStruct)
+        }
+        
+    }
+}
+
+$struct = @{}
+fillStruct $root $struct
+Write-Output $struct
+foreach($key in $struct.keys)
+{
+    Write-Output $struct[$key]
+}
+Set-Content -Path  $structureFileName -Value $null
+#$outPutFileContent | foreach { Add-Content -Path  $structureFileName -Value $_ }
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246

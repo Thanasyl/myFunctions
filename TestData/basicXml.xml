@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+=======
+<?xml version="1.0" encoding="UTF-8"?>
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246
 <Cars>
     <Car Mark="Ford" Model="Fiesta">
         <Seats>4</Seats>
@@ -15,4 +19,9 @@
         <Seats>8</Seats>
         <Interior>Cloth</Interior>
     </Car>
+<<<<<<< HEAD
 </Cars>
+=======
+</Cars>
+
+>>>>>>> 5c97479932dcfe7bd0b5c14a48be8b3a760f9246

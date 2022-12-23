@@ -5,24 +5,25 @@ if ($xmlFileName -eq $null) {
 }   
 
 [xml]$XmlDocument = Get-Content -Path $xmlFileName
-$root=$XmlDocument.DocumentElement
 [System.Collections.ArrayList]$outPutFileContent= @()
 
 function fillTxt {
 
     param (
-        $struct, $outPutFileContent
+        $struct, $outPutFileContent, [int]$level=1
     )
 
-    if ($xmlNode.ChildNodes.Count -lt 1){
+    if ($struct.Count -lt 1){
         #$outPutFileContent.Add([string]$level + ";" + [string]$xmlNode.Name) 
     }
     else {
-        $lineNb=$outPutFileContent.Add([string]$level + "," + [string]$xmlNode.Name)
-        for ($i=0; $i -lt $xmlNode.ChildNodes.Count; $i=$i+1){
-            $nextLevel=$level+1
-            $outPut=fillTxt $xmlNode.ChildNodes[$i]  $nextLevel  $outPutFileContent 
-            Write-OutPut $outPut
+        foreach ($key in $struct.keys)
+        {
+            if ($key -ne "#text")
+            {
+                $lineNb = $outPutFileContent.Add([string]$level + "," + [string]$key)
+                fillTxt $struct[$key] $outPutFileContent $($level+1)
+            }
         }
     }
 }
@@ -38,21 +39,35 @@ function fillStruct {
         fillStruct $childNode $childStruct
 
         if ( $struct.keys -contains $childNode.Name ){
-            #$struct[$childNode.Name].Add($childStruct)
+            combineStruct $struct[$childNode.Name] $childStruct
         }
         else {
-            $struct.Add($childNode.Name, $childStruct)
+            $struct[$childNode.Name] = $childStruct
         }
         
     }
 }
 
-$struct = @{}
-fillStruct $root $struct
-Write-Output $struct
-foreach($key in $struct.keys)
-{
-    Write-Output $struct[$key]
+function combineStruct {
+    param (
+        [hashtable]$struct1, [hashtable]$struct2
+    )
+
+    foreach ($key in $struct2.keys)
+    {
+        if ($struct1.keys -contains $key)
+        {
+            combineStruct $struct1[$key] $struct2[$key]
+        }
+        else {
+            $struct1[$key] = $struct2[$key]
+        }
+    }
 }
+
+$struct = @{}
+fillStruct $XmlDocument $struct
+fillTxt $struct $outPutFileContent
+
 Set-Content -Path  $structureFileName -Value $null
-#$outPutFileContent | foreach { Add-Content -Path  $structureFileName -Value $_ }
+$outPutFileContent | foreach { Add-Content -Path  $structureFileName -Value $_ }

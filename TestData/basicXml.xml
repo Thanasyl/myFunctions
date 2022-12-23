@@ -15,6 +15,10 @@
     <Car Mark="Toyota" Model="Sienna">
         <Seats>8</Seats>
         <Interior>Cloth</Interior>
+        <Amplifier>
+            <Mark>"Sony"</Mark>
+            <Size>"big"</Size>
+        </Amplifier>
     </Car>
 </Cars>
 

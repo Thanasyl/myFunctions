@@ -1,4 +1,4 @@
-param ($xmlFileName='.\TestData\basicXml.xml', $structureFileName='C:\cygwin64\home\natha\myFunctions\TestData\basicXmlStructure.csv')
+param ($xmlFileName='.\TestData\basicXml.xml', $structureFileName='.\TestData\basicXmlStructure.csv')
 
 if ($xmlFileName -eq $null) {
     $xmlFileName = read-host -Prompt "Please enter an xmlFileName" 
@@ -6,8 +6,11 @@ if ($xmlFileName -eq $null) {
 
 [xml]$XmlDocument = Get-Content -Path $xmlFileName
 $root=$XmlDocument.DocumentElement
+$dictStruct=@{}
 [System.Collections.ArrayList]$outPutFileContent= @()
+$dictStruct["test"]=@{Name="value"}
 
+#function to complete
 function fillTxt {
 
     param (
@@ -29,14 +32,6 @@ function fillTxt {
     }
 }
 
-
-function fuseContent {
-    param (
-        $level, $outPutFileContent
-    )
-    [System.Collections.ArrayList]$struct= @()
-    #if ($)
-}
 
 #Unfinished function
 function getStruct {
@@ -82,8 +77,7 @@ function getLevel {
 fillTxt $root $outPutFileContent
 
 $lineNb=$outPutFileContent.Count-1
-$tmp=getStruct $outPutFileContent
-Write-Output $tmp
+Write-Output $lineNb
 
 Set-Content -Path  $structureFileName -Value $null
 $outPutFileContent | foreach { Add-Content -Path  $structureFileName -Value $_ }

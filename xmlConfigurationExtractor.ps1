@@ -1,4 +1,4 @@
-param ($xmlFileName, $structureFileName)
+param ($xmlFileName = "C:\Users\Developpeur\Documents\Project.xml", $structureFileName = 'C:\Users\Developpeur\Documents\Project.csv')
 
 if ( $null -eq $xmlFileName ) {
     $xmlFileName = read-host -Prompt "Please enter .xml source fileName" 
@@ -56,12 +56,13 @@ function fillStruct {
     {
         [hashtable]$childStruct=@{}
         fillStruct $childNode $childStruct
+        $key = $childNode.SchemaInfo.LocalName
 
-        if ( $struct.keys -contains $childNode.Name ){
-            combineStruct $struct[$childNode.Name] $childStruct
+        if ( $struct.keys -contains $key ){
+            combineStruct $struct[$key] $childStruct
         }
-        else {
-            $struct[$childNode.Name] = $childStruct
+        elseif ($childNode.NodeType -ne "XmlDeclaration") {
+            $struct[$key] = $childStruct
         }
         
     }

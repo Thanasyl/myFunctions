@@ -21,7 +21,7 @@ function fillCSVHeader
     param (
         $CSV
     )
-    $lineNb = $CSV.Add("Level,TAG,Multiplicity,Comments")
+    $lineNb = $CSV.Add("Level,TAG,Multiplicity,Type,Comments")
 }
 function fillCSVData {
 
@@ -35,8 +35,18 @@ function fillCSVData {
     else {
         foreach ($key in $struct.keys)
         {
-            $lineNb = $CSV.Add([string]$level + "," + [string]$key)
-            fillCSVData $struct[$key] $CSV $($level+1)
+            if ($key -ne "_Multiplicity")
+            {
+                if ([string]$struct[$key]["_Multiplicity"] -ne "")
+                {
+                    $lineNb = $CSV.Add([string]$level + "," + [string]$key + "," + [string]$struct[$key]["_Multiplicity"] + ",Element")
+                }
+                else
+                {
+                    $lineNb = $CSV.Add([string]$level + "," + [string]$key + ",0..1,Attribute")
+                }
+                fillCSVData $struct[$key] $CSV $($level+1)
+            }
         }
     }
 }
@@ -69,10 +79,12 @@ function fillStruct {
 
         if ( $struct.keys -contains $key )
         {
+            $childStruct.Add("_Multiplicity", "1..*")
             combineStruct $struct[$key] $childStruct
         }
         elseif ($childNode.NodeType -eq "Element") 
         {
+            $childStruct.Add("_Multiplicity", "1")
             $struct[$key] = $childStruct
         }
     }
@@ -87,9 +99,16 @@ function combineStruct {
     {
         if ($struct1.keys -contains $key)
         {
-            combineStruct $struct1[$key] $struct2[$key]
+            if ($key -ne "_Multiplicity")
+            {
+                combineStruct $struct1[$key] $struct2[$key]
+            }
+            else 
+            {
+                $struct1[$key] = $struct2[$key]
+            }
         }
-        else 
+        else
         {
             $struct1[$key] = $struct2[$key]
         }

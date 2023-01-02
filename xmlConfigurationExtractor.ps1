@@ -7,9 +7,6 @@ if ( $null -eq $structureFileName ) {
     $structureFileName = read-host -Prompt "Please enter .csv target fileName" 
 }   
 
-[xml]$XmlDocument = Get-Content -Path $xmlFileName
-[System.Collections.ArrayList]$CSV= @()
-
 function fillCSV
 {
     param (
@@ -24,7 +21,7 @@ function fillCSVHeader
     param (
         $CSV
     )
-    $lineNb = $CSV.Add("level,TAG")
+    $lineNb = $CSV.Add("Level,TAG,Multiplicity,Comments")
 }
 function fillCSVData {
 
@@ -54,10 +51,12 @@ function fillStruct {
         [hashtable]$childStruct=@{}
         $key = $attribute.name
 
-        if ( $struct.keys -contains $key ){
+        if ( $struct.keys -contains $key )
+        {
             
         }
-        else {
+        else 
+        {
             $struct[$key] = @{}
         }
     }
@@ -68,10 +67,12 @@ function fillStruct {
         fillStruct $childNode $childStruct
         $key = $childNode.SchemaInfo.LocalName
 
-        if ( $struct.keys -contains $key ){
+        if ( $struct.keys -contains $key )
+        {
             combineStruct $struct[$key] $childStruct
         }
-        elseif ($childNode.NodeType -eq "Element") {
+        elseif ($childNode.NodeType -eq "Element") 
+        {
             $struct[$key] = $childStruct
         }
     }
@@ -88,13 +89,17 @@ function combineStruct {
         {
             combineStruct $struct1[$key] $struct2[$key]
         }
-        else {
+        else 
+        {
             $struct1[$key] = $struct2[$key]
         }
     }
 }
 
+[xml]$XmlDocument = Get-Content -Path $xmlFileName
+[System.Collections.ArrayList]$CSV= @()
 $struct = @{}
+
 fillStruct $XmlDocument $struct
 fillCSV $struct $CSV
 
